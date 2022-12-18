@@ -55,5 +55,29 @@ describe("Probe", () => {
       expect(probe.move("LMLMLMLMM")).to.equal("23N");
       expect(probe.move("MMRMMRMRRM")).to.equal("33N");
     });
+
+    it("should return the current state if the command is invalid", () => {
+      expect(probe.move("XYZ")).to.equal("22N");
+    });
+
+    it("should not move if the probe is at the edge of the plateau", () => {
+      probe.state = "00S";
+      expect(probe.move("M")).to.equal("00S");
+    });
+
+    it("should move in all four directions", () => {
+      expect(probe.move("M")).to.equal("23N");
+      expect(probe.move("R")).to.equal("23E");
+      expect(probe.move("M")).to.equal("33E");
+      expect(probe.move("R")).to.equal("33S");
+      expect(probe.move("M")).to.equal("32S");
+      expect(probe.move("R")).to.equal("32W");
+      expect(probe.move("M")).to.equal("22W");
+      expect(probe.move("R")).to.equal("22N");
+    });
+
+    it("should move multiple times in the same direction", () => {
+      expect(probe.move("MMMMMMMMM")).to.equal("23N");
+    });
   });
 });
